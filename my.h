@@ -1,0 +1,43 @@
+/*
+** EPITECH PROJECT, 2023
+** epitech_pool_day09
+** File description:
+** file that contains all prototypes
+*/
+
+#ifndef MY_H
+    #define MY_H
+
+typedef struct {
+    int j;
+    int i;
+    int count;
+    char **copenv;
+    char **environ;
+}struct1;
+
+void my_putchar(char c);
+int lenght(char *buffer);
+void print_map(char **array);
+int weidth(char *buffer);
+void free_wordarray(char **wordtab);
+char **str_to_wordarray(char *phrase, struct1 *param);
+int count_lines2(char *str);
+int count_char(char *str);
+int my_strcmp(char *s1, char *s2);
+int my_put_nbr(int n);
+char *my_strcpy(char *dest, char const *src);
+int my_putstr(char const *str);
+int str_len(const char *str);
+void ls_a(void);
+int my_printf(const char *format, ...);
+static int count_verif(const char *p, const char *r);
+void gestion_error(int i);
+char **separe_diff_line(char *line);
+void loop_shell(struct1 *param);
+char **copy_env(void);
+char *my_strdup(char const *src);
+void init_shell(struct1 *param);
+
+
+#endif /* MY_H */
