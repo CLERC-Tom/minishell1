@@ -7,12 +7,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
+#include <dirent.h>
 #include <string.h>
 #include <sys/wait.h>
 #include <signal.h>
 #include "my.h"
 
-static int free_all(struct1 *param)
+int free_all(struct1 *param)
 {
     if (param->copenv != NULL) {
         for (int i = 0; param->copenv[i] != NULL; i++) {
@@ -21,24 +23,6 @@ static int free_all(struct1 *param)
         free(param->copenv);
     }
     return 0;
-}
-
-static int exit_shell(struct1 *param)
-{
-    free_all(param);
-    write(STDOUT_FILENO, "exit\n", 5);
-    exit(0);
-}
-
-static int exit_shell2(struct1 *param)
-{
-    free_all(param);
-    exit(0);
-}
-
-void gestion_error(int i)
-{
-    write(STDOUT_FILENO, "\ncobra> ", 10);
 }
 
 char **separe_diff_line(char *line)
@@ -61,18 +45,14 @@ void loop_shell(struct1 *param)
 {
     char *line = NULL;
     size_t len = 0;
-    char **tokens = NULL;
     int shell_running = 1;
 
     write(STDOUT_FILENO, "cobra> ", 7);
     while (shell_running && getline(&line, &len, stdin) != -1) {
-        tokens = separe_diff_line(line);
-        if (tokens[0] != NULL && my_strcmp(tokens[0], "exit") == 0) {
-            exit_shell2(param);
-        }
-        free(tokens);
-        tokens = NULL;
-        write(STDOUT_FILENO, "cobra> ", 7);
+        param->tokens = separe_diff_line(line);
+        verif_specifier(param);
+        free(param->tokens);
+        param->tokens = NULL;
     }
     free(line);
 }
