@@ -4,5 +4,6 @@
         "bitset": "c",
         "unordered_map": "c",
         "chrono": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

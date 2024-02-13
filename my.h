@@ -15,6 +15,8 @@ typedef struct {
     char **copenv;
     char **environ;
     char **tokens;
+    char **env;
+    char **tokens2;
 }struct1;
 
 void my_putchar(char c);
@@ -42,7 +44,7 @@ void init_shell(struct1 *param);
 int verif_specifier(struct1 *param);
 int exit_shell(struct1 *param);
 void gestion_error(int i);
-void my_ls(char **tokens);
+int my_ls(char **tokens);
 int free_all(struct1 *param);
 
 
