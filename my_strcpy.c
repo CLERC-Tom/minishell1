@@ -11,7 +11,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
 #include <stdio.h>
 
 char *my_strcpy(char *dest, const char *src)
@@ -23,6 +22,5 @@ char *my_strcpy(char *dest, const char *src)
         index++;
     }
     dest[index] = '\0';
-    my_printf("%s", dest);
     return dest;
 }

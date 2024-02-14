@@ -12,10 +12,14 @@
 #include <signal.h>
 #include "my.h"
 
-int main(int argc, char **argv)
+int main(void)
 {
-    struct1 *param;
+    struct1 *param = malloc(sizeof(struct1));
 
+    if (param == NULL) {
+        return 84;
+    }
     init_shell(param);
+    free_all(param);
     return 0;
 }

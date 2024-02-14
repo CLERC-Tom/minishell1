@@ -3,7 +3,10 @@
         "__bit_reference": "c",
         "bitset": "c",
         "unordered_map": "c",
-        "chrono": "c"
+        "chrono": "c",
+        "string.h": "c",
+        "signal.h": "c",
+        "my.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

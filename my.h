@@ -7,6 +7,7 @@
 
 #ifndef MY_H
     #define MY_H
+    #define BUF_SIZE 1024
 
 typedef struct {
     int j;
@@ -17,6 +18,7 @@ typedef struct {
     char **tokens;
     char **env;
     char **tokens2;
+    char *line;
 }struct1;
 
 void my_putchar(char c);
@@ -41,11 +43,12 @@ void loop_shell(struct1 *param);
 char **copy_env(void);
 char *my_strdup(char const *src);
 void init_shell(struct1 *param);
-int verif_specifier(struct1 *param);
+int verif_specifier(struct1 *param, char current_dir[BUF_SIZE]);
 int exit_shell(struct1 *param);
 void gestion_error(int i);
 int my_ls(char **tokens);
 int free_all(struct1 *param);
-
+int my_pwd(void);
+void my_strcat(char *chaine1, char *chaine2);
 
 #endif /* MY_H */

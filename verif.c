@@ -57,12 +57,28 @@ int my_pwd(void)
     }
 }
 
-int my_setenv(char **tokens)
+int setenv_cmd(struct1 *param)
 {
+    extern char **environ;
+    char **env = environ;
+    int n = 0;
+    char *new_value = malloc(strlen(param->tokens[1])
+    + strlen(param->tokens[2]) + 2);
+
+    if (new_value == NULL) {
+        return 1;
+    }
+    my_strcpy(new_value, param->tokens[1]);
+    my_strcat(new_value, "=");
+    my_strcat(new_value, param->tokens[2]);
+    for (int i = 0; env[i] != NULL; i ++) {
+        n = i;
+    }
+    env[n] = new_value;
     return 0;
 }
 
-int verif_specifier(struct1 *param)
+int verif_specifier(struct1 *param, char current_dir[BUF_SIZE])
 {
     if (param->tokens[0] != NULL && my_strcmp(param->tokens[0], "exit") == 0) {
         exit_shell(param);
@@ -75,12 +91,13 @@ int verif_specifier(struct1 *param)
     }
     if (param->tokens[0] != NULL && my_strcmp(param->tokens[0], "pwd") == 0) {
         my_pwd();
-    }
-    if (param->tokens[0] != NULL
+        my_printf("cobra>%s ", current_dir);
+    } else if (param->tokens[0] != NULL
     && my_strcmp(param->tokens[0], "setenv") == 0) {
-        my_setenv(param->tokens2);
+        setenv_cmd(param);
+        my_printf("cobra>%s ", current_dir);
     } else {
-        write(STDOUT_FILENO, "cobra> ", 7);
+        my_printf("cobra>%s ", current_dir);
     }
     return 0;
 }

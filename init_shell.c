@@ -31,11 +31,11 @@ char **separe_diff_line(char *line)
     char **tokens = malloc(64 * sizeof(char *));
     int position = 0;
 
-    token = strtok(line, "\t\r\n\a");
+    token = strtok(line, " ");
     while (token != NULL) {
         tokens[position] = token;
         position++;
-        token = strtok(NULL, "\t\r\n\a");
+        token = strtok(NULL, " ");
     }
     tokens[position] = NULL;
     return tokens;
@@ -43,18 +43,26 @@ char **separe_diff_line(char *line)
 
 void loop_shell(struct1 *param)
 {
-    char *line = NULL;
-    size_t len = 0;
     int shell_running = 1;
+    char current_dir[BUF_SIZE];
+    int num_token = 0;
+    size_t len = 0;
 
-    write(STDOUT_FILENO, "cobra> ", 7);
-    while (shell_running && getline(&line, &len, stdin) != -1) {
-        param->tokens = separe_diff_line(line);
-        verif_specifier(param);
+    getcwd(current_dir, sizeof(current_dir));
+    my_printf("cobra>%s ", current_dir);
+    while (shell_running && getline(&param->line, &len, stdin) != -1) {
+        param->line[strcspn(param->line, "\n")] = 0;
+        param->tokens = separe_diff_line(param->line);
+        getcwd(current_dir, sizeof(current_dir));
+        verif_specifier(param, current_dir);
+        num_token ++;
         free(param->tokens);
         param->tokens = NULL;
     }
-    free(line);
+    param->tokens[num_token - 1][str_len(param->tokens[num_token - 1]) - 1]
+    = '\0';
+    param->tokens[num_token] = NULL;
+    free(param->line);
 }
 
 char **copy_env()
@@ -82,7 +90,6 @@ char **copy_env()
 
 void init_shell(struct1 *param)
 {
-    param = malloc(sizeof(struct1));
     param->copenv = copy_env();
     signal(SIGINT, gestion_error);
     loop_shell(param);
