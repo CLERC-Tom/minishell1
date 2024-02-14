@@ -17,7 +17,6 @@
 int exit_shell(struct1 *param)
 {
     free_all(param);
-    write(STDOUT_FILENO, "exit\n", 5);
     exit(0);
 }
 

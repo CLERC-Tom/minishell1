@@ -57,13 +57,13 @@ int my_pwd(void)
     }
 }
 
-int setenv_cmd(struct1 *param)
+int my_setenv(struct1 *param)
 {
     extern char **environ;
     char **env = environ;
     int n = 0;
-    char *new_value = malloc(strlen(param->tokens[1])
-    + strlen(param->tokens[2]) + 2);
+    char *new_value = malloc(str_len(param->tokens[1])
+    + str_len(param->tokens[2]) + 2);
 
     if (new_value == NULL) {
         return 1;
@@ -94,7 +94,7 @@ int verif_specifier(struct1 *param, char current_dir[BUF_SIZE])
         my_printf("cobra>%s ", current_dir);
     } else if (param->tokens[0] != NULL
     && my_strcmp(param->tokens[0], "setenv") == 0) {
-        setenv_cmd(param);
+        my_setenv(param);
         my_printf("cobra>%s ", current_dir);
     } else {
         my_printf("cobra>%s ", current_dir);
