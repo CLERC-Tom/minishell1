@@ -50,5 +50,9 @@ int my_ls(char **tokens);
 int free_all(struct1 *param);
 int my_pwd(void);
 void my_strcat(char *chaine1, char *chaine2);
+char *my_getenv(const char *name);
+char *find_command(char *command);
+int make_all(char *file, char *argv[]);
+int my_strncmp(const char *str1, const char *str2, size_t n);
 
 #endif /* MY_H */

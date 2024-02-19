@@ -41,27 +41,38 @@ char **separe_diff_line(char *line)
     return tokens;
 }
 
-void loop_shell(struct1 *param)
+void static loop_shell2(struct1 *param, char *current_dir, size_t len)
 {
     int shell_running = 1;
-    char current_dir[BUF_SIZE];
     int num_token = 0;
-    size_t len = 0;
 
-    getcwd(current_dir, sizeof(current_dir));
-    my_printf("cobra>%s ", current_dir);
     while (shell_running && getline(&param->line, &len, stdin) != -1) {
         param->line[strcspn(param->line, "\n")] = 0;
         param->tokens = separe_diff_line(param->line);
         getcwd(current_dir, sizeof(current_dir));
         verif_specifier(param, current_dir);
-        num_token ++;
+        if (param->tokens != NULL) {
+            for (num_token = 0; param->tokens[num_token]
+            != NULL; num_token++) {
+                param->tokens[num_token][str_len(param->tokens[num_token]) - 1]
+                = '\0';
+            }
+        }
         free(param->tokens);
         param->tokens = NULL;
     }
-    param->tokens[num_token - 1][str_len(param->tokens[num_token - 1]) - 1]
-    = '\0';
-    param->tokens[num_token] = NULL;
+}
+
+void loop_shell(struct1 *param)
+{
+    char current_dir[BUF_SIZE];
+    size_t len = 0;
+
+    getcwd(current_dir, sizeof(current_dir));
+    if (isatty(STDIN_FILENO)) {
+        my_printf("cobra>%s ", current_dir);
+    }
+    loop_shell2(param, current_dir, len);
     free(param->line);
 }
 
