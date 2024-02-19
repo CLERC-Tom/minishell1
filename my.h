@@ -4,6 +4,14 @@
 ** File description:
 ** file that contains all prototypes
 */
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <dirent.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <signal.h>
 
 #ifndef MY_H
     #define MY_H
@@ -22,10 +30,7 @@ typedef struct {
 }struct1;
 
 void my_putchar(char c);
-int lenght(char *buffer);
-void print_map(char **array);
-int weidth(char *buffer);
-void free_wordarray(char **wordtab);
+int my_strncmp(const char *str1, const char *str2, int n);
 char **str_to_wordarray(char *phrase, struct1 *param);
 int count_lines2(char *str);
 int count_char(char *str);
@@ -34,25 +39,26 @@ int my_put_nbr(int n);
 char *my_strcpy(char *dest, char const *src);
 int my_putstr(char const *str);
 int str_len(const char *str);
-void ls_a(void);
 int my_printf(const char *format, ...);
+char *my_strdup(char const *src);
 static int count_verif(const char *p, const char *r);
+void my_strcat(char *chaine1, char *chaine2);
+
 void gestion_error(int i);
 char **separe_diff_line(char *line);
 void loop_shell(struct1 *param);
 char **copy_env(void);
-char *my_strdup(char const *src);
 void init_shell(struct1 *param);
 int verif_specifier(struct1 *param, char current_dir[BUF_SIZE]);
 int exit_shell(struct1 *param);
 void gestion_error(int i);
-int my_ls(char **tokens);
 int free_all(struct1 *param);
-int my_pwd(void);
-void my_strcat(char *chaine1, char *chaine2);
+
 char *my_getenv(const char *name);
 char *find_command(char *command);
 int make_all(char *file, char *argv[]);
-int my_strncmp(const char *str1, const char *str2, int n);
+
+int my_setenv(struct1 *param);
+void my_env(void);
 
 #endif /* MY_H */

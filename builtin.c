@@ -4,14 +4,6 @@
 ** File description:
 ** len of an int
 */
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <errno.h>
-#include <dirent.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <signal.h>
 #include "my.h"
 
 char *my_getenv(const char *name)

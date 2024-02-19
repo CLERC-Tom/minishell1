@@ -19,6 +19,7 @@ SRC	=   my_putchar.c			\
 		strtoword.c \
 		verif.c \
 		gestion_erreur.c \
+		command_ext.c \
 		str_cat.c \
 		init_shell.c \
 		main.c \
