@@ -35,6 +35,21 @@ int my_setenv(struct1 *param)
     return 0;
 }
 
+int my_unsetenv(struct1 *params)
+{
+    extern char **environ;
+    char **env = environ;
+
+    for (int i = 0; env[i] != NULL; i++) {
+            if (my_strncmp(env[i], params->tokens[1],
+                str_len(params->tokens[1])) == 0) {
+                env[i] = NULL;
+                return 0;
+            }
+    }
+    return 1;
+}
+
 void my_env(void)
 {
     extern char **environ;

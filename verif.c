@@ -8,19 +8,10 @@
 
 int my_build_command(char *command)
 {
-    if (my_strcmp(command, "ls") == 0) {
-        return 1;
-    }
-    if (my_strcmp(command, "pwd") == 0) {
-        return 1;
-    }
-    if (my_strcmp(command, "cat") == 0) {
-        return 1;
-    }
-    if (my_strcmp(command, "touch") == 0) {
-        return 1;
-    }
-    if (my_strcmp(command, "rm") == 0) {
+    char *full_path = find_command(command);
+
+    if (full_path != NULL) {
+        free(full_path);
         return 1;
     }
     return 0;
@@ -38,8 +29,21 @@ static int verif_builtin(struct1 *param)
     return 0;
 }
 
+void verif_exist(struct1 *param)
+{
+    if (verif_builtin(param) == 0) {
+        if (my_build_command(param->tokens[0]) == 0) {
+            perror(param->tokens[0]);
+        }
+    }
+}
+
 void dif_commande(struct1 *param)
 {
+    if (verif_builtin(param) == 0) {
+        if (my_build_command(param->tokens[0]) == 0) {
+        }
+    }
     if (my_strcmp(param->tokens[0], "exit") == 0) {
         exit_shell(param);
     }
@@ -49,8 +53,8 @@ void dif_commande(struct1 *param)
     if (my_strcmp(param->tokens[0], "setenv") == 0) {
         my_setenv(param);
     }
-    if (verif_builtin(param) == 0) {
-        perror(param->tokens[0]);
+    if (my_strcmp(param->tokens[0], "unsetenv") == 0) {
+        my_unsetenv(param);
     }
 }
 

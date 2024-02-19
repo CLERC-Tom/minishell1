@@ -21,10 +21,26 @@ char *my_getenv(const char *name)
     return NULL;
 }
 
-char *find_command(char *command)
+char *execute_in(char *command)
 {
-    char *path = my_getenv("PATH");
-    char *path_part = strtok(my_strdup(path), ":");
+    char *full_path = NULL;
+    char *result = NULL;
+
+    if (command[0] == '.' && command[1] == '/') {
+        full_path = malloc(str_len(command) + 1);
+        my_strcpy(full_path, &command[2]);
+        if (access(full_path, X_OK) == 0) {
+            result = my_strdup(full_path);
+            free(full_path);
+            return result;
+        }
+        free(full_path);
+    }
+    return NULL;
+}
+
+char *parcours_path(char *command, char *path_part)
+{
     char *full_path = NULL;
     char *result = NULL;
 
@@ -41,7 +57,21 @@ char *find_command(char *command)
         free(full_path);
         path_part = strtok(NULL, ":");
     }
-    free(my_strdup(path));
+    return result;
+}
+
+char *find_command(char *command)
+{
+    char *path = NULL;
+    char *result = execute_in(command);
+    char *path_part;
+
+    if (result == NULL) {
+        path = my_getenv("PATH");
+        path_part = strtok(my_strdup(path), ":");
+        result = parcours_path(command, path_part);
+        free(my_strdup(path));
+    }
     return result;
 }
 

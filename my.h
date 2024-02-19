@@ -60,5 +60,6 @@ int make_all(char *file, char *argv[]);
 
 int my_setenv(struct1 *param);
 void my_env(void);
+int my_unsetenv(struct1 *param);
 
 #endif /* MY_H */
