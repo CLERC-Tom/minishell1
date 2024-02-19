@@ -33,7 +33,7 @@ char **separe_diff_line(char *line)
 
     token = strtok(line, " ");
     while (token != NULL) {
-        tokens[position] = token;
+        tokens[position] = my_strdup(token);
         position++;
         token = strtok(NULL, " ");
     }
@@ -47,15 +47,17 @@ void static loop_shell2(struct1 *param, char *current_dir, size_t len)
     int num_token = 0;
 
     while (shell_running && getline(&param->line, &len, stdin) != -1) {
-        param->line[strcspn(param->line, "\n")] = 0;
+        param->line[my_strcspn(param->line, "\n")] = 0;
         param->tokens = separe_diff_line(param->line);
         getcwd(current_dir, sizeof(current_dir));
         verif_specifier(param, current_dir);
         if (param->tokens != NULL) {
             for (num_token = 0; param->tokens[num_token]
             != NULL; num_token++) {
-                param->tokens[num_token][str_len(param->tokens[num_token]) - 1]
-                = '\0';
+                if (str_len(param->tokens[num_token]) > 0) {
+                    param->tokens[num_token][str_len(param->tokens[num_token]) - 1]
+                    = '\0';
+                }
             }
         }
         free(param->tokens);

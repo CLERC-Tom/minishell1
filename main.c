@@ -21,5 +21,6 @@ int main(void)
     }
     init_shell(param);
     free_all(param);
+    free(param);
     return 0;
 }

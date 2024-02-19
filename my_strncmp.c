@@ -14,7 +14,7 @@
 #include <signal.h>
 #include "my.h"
 
-int my_strncmp(const char *str1, const char *str2, size_t n)
+int my_strncmp(const char *str1, const char *str2, int n)
 {
     while (n--) {
         if (*str1 != *str2) {

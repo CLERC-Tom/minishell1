@@ -57,11 +57,12 @@ int make_all(char *file, char *argv[])
 {
     extern char **environ;
     char *full_path = find_command(file);
-    pid_t pid = fork();
+    pid_t pid;
 
     if (full_path == NULL) {
         return 84;
     }
+    pid = fork();
     if (pid < 0) {
         perror("fork");
         return 84;
@@ -71,7 +72,10 @@ int make_all(char *file, char *argv[])
         perror("execve");
         exit(EXIT_FAILURE);
     } else {
-        waitpid(pid, NULL, 0);
+        if (waitpid(pid, NULL, 0) < 0) {
+            perror("waitpid");
+            return 84;
+        }
     }
     free(full_path);
     return 0;

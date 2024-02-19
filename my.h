@@ -53,6 +53,6 @@ void my_strcat(char *chaine1, char *chaine2);
 char *my_getenv(const char *name);
 char *find_command(char *command);
 int make_all(char *file, char *argv[]);
-int my_strncmp(const char *str1, const char *str2, size_t n);
+int my_strncmp(const char *str1, const char *str2, int n);
 
 #endif /* MY_H */
