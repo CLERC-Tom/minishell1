@@ -41,27 +41,36 @@ char **separe_diff_line(char *line)
     return tokens;
 }
 
+static void process_token(struct1 *param, char *token)
+{
+    if (str_len(token) > 0) {
+        token[str_len(token) - 1] = '\0';
+    }
+}
+
+static void handle_tokens(struct1 *param, char *current_dir)
+{
+    int num_token = 0;
+
+    if (param->tokens != NULL) {
+        for (num_token = 0; param->tokens[num_token] != NULL; num_token++) {
+            process_token(param, param->tokens[num_token]);
+        }
+    }
+    free(param->tokens);
+    param->tokens = NULL;
+}
+
 void static loop_shell2(struct1 *param, char *current_dir, size_t len)
 {
     int shell_running = 1;
-    int num_token = 0;
 
     while (shell_running && getline(&param->line, &len, stdin) != -1) {
-        param->line[my_strcspn(param->line, "\n")] = 0;
+        param->line[strcspn(param->line, "\n")] = 0;
         param->tokens = separe_diff_line(param->line);
         getcwd(current_dir, sizeof(current_dir));
         verif_specifier(param, current_dir);
-        if (param->tokens != NULL) {
-            for (num_token = 0; param->tokens[num_token]
-            != NULL; num_token++) {
-                if (str_len(param->tokens[num_token]) > 0) {
-                    param->tokens[num_token][str_len(param->tokens[num_token]) - 1]
-                    = '\0';
-                }
-            }
-        }
-        free(param->tokens);
-        param->tokens = NULL;
+        handle_tokens(param, current_dir);
     }
 }
 

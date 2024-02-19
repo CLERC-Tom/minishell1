@@ -53,27 +53,38 @@ char *find_command(char *command)
     return result;
 }
 
+static void erreur1(char *full_path, char *argv[], char **environ)
+{
+    execve(full_path, argv, environ);
+    perror("execve");
+    exit(EXIT_FAILURE);
+}
+
+static int verif_error(pid_t pid)
+{
+    if (waitpid(pid, NULL, 0) < 0) {
+        perror("waitpid");
+        return 84;
+    }
+    return 0;
+}
+
 int make_all(char *file, char *argv[])
 {
     extern char **environ;
     char *full_path = find_command(file);
-    pid_t pid;
+    pid_t pid = fork();
 
     if (full_path == NULL) {
         return 84;
     }
-    pid = fork();
     if (pid < 0) {
-        perror("fork");
         return 84;
     }
     if (pid == 0) {
-        execve(full_path, argv, environ);
-        perror("execve");
-        exit(EXIT_FAILURE);
+        erreur1(full_path, argv, environ);
     } else {
-        if (waitpid(pid, NULL, 0) < 0) {
-            perror("waitpid");
+        if (verif_error(pid) != 0) {
             return 84;
         }
     }

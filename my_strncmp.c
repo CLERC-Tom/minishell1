@@ -16,7 +16,7 @@
 
 int my_strncmp(const char *str1, const char *str2, int n)
 {
-    while (n--) {
+    for (int i = 0; i < n; i++) {
         if (*str1 != *str2) {
             return *str1 - *str2;
         }
