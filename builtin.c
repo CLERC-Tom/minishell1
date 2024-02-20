@@ -127,11 +127,11 @@ static void erreur1(char *full_path, char *argv[], char **environ)
 static int verif_error(pid_t pid)
 {
     if (pid < 0) {
-        return 84;
+        return 1;
     }
     if (waitpid(pid, NULL, 0) < 0) {
         perror("waitpid");
-        return 84;
+        return 1;
     }
     return 0;
 }
