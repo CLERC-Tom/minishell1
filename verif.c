@@ -17,10 +17,16 @@ int my_build_command(char *command)
     return 0;
 }
 
-static int verif_builtin(struct1 *param)
+int verif_builtin(struct1 *param)
 {
     if (param->tokens[0] == NULL) {
         return 0;
+    }
+    if (my_strcmp(param->tokens[0], "exit") == 0 ||
+        my_strcmp(param->tokens[0], "env") == 0 ||
+        my_strcmp(param->tokens[0], "setenv") == 0 ||
+        my_strcmp(param->tokens[0], "unsetenv") == 0) {
+        return 1;
     }
     if (my_build_command(param->tokens[0])) {
         make_all(param->tokens[0], param->tokens);
@@ -33,7 +39,7 @@ void verif_exist(struct1 *param)
 {
     if (verif_builtin(param) == 0) {
         if (my_build_command(param->tokens[0]) == 0) {
-            perror(param->tokens[0]);
+            printf("%s : Command not found.\n", param->tokens[0]);
         }
     }
 }
@@ -67,6 +73,7 @@ int verif_specifier(struct1 *param, char current_dir[BUF_SIZE])
         return 0;
     }
     dif_commande(param);
+    verif_exist(param);
     if (isatty(STDIN_FILENO)) {
         my_printf("cobra>%s ", current_dir);
     }

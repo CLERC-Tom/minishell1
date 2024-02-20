@@ -14,20 +14,31 @@
 #include <signal.h>
 #include "my.h"
 
+int appel(struct1 *param, char *new_value)
+{
+    my_strcpy(new_value, param->tokens[1]);
+    my_strcat(new_value, "=");
+    my_strcat(new_value, param->tokens[2]);
+    return 0;
+}
+
 int my_setenv(struct1 *param)
 {
     extern char **environ;
     char **env = environ;
+    char *new_value;
     int n = 0;
-    char *new_value = malloc(str_len(param->tokens[1])
-    + str_len(param->tokens[2]) + 2);
 
+    if (param->tokens[1] == NULL ||
+    param->tokens[2] == NULL) {
+        return 1;
+    }
+    new_value = malloc(str_len(param->tokens[1])
+    + str_len(param->tokens[2]) + 2);
     if (new_value == NULL) {
         return 1;
     }
-    my_strcpy(new_value, param->tokens[1]);
-    my_strcat(new_value, "=");
-    my_strcat(new_value, param->tokens[2]);
+    appel(param, new_value);
     for (int i = 0; env[i] != NULL; i ++) {
         n = i;
     }
@@ -40,12 +51,15 @@ int my_unsetenv(struct1 *params)
     extern char **environ;
     char **env = environ;
 
+    if (params->tokens[1] == NULL) {
+        return 1;
+    }
     for (int i = 0; env[i] != NULL; i++) {
-            if (my_strncmp(env[i], params->tokens[1],
-                str_len(params->tokens[1])) == 0) {
-                env[i] = NULL;
-                return 0;
-            }
+        if (my_strncmp(env[i], params->tokens[1],
+        str_len(params->tokens[1])) == 0) {
+            env[i] = NULL;
+            return 0;
+        }
     }
     return 1;
 }
