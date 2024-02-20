@@ -31,11 +31,11 @@ char **separe_diff_line(char *line)
     char **tokens = malloc(64 * sizeof(char *));
     int position = 0;
 
-    token = strtok(line, " ");
+    token = strtok(line, " \t\n");
     while (token != NULL) {
         tokens[position] = my_strdup(token);
         position++;
-        token = strtok(NULL, " ");
+        token = strtok(NULL, " \t\n");
     }
     tokens[position] = NULL;
     return tokens;
