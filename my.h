@@ -31,6 +31,7 @@ typedef struct {
 
 void my_putchar(char c);
 int my_strncmp(const char *str1, const char *str2, int n);
+int my_strcspn(const char *str, const char *reject);
 char **str_to_wordarray(char *phrase, struct1 *param);
 int count_lines2(char *str);
 int count_char(char *str);

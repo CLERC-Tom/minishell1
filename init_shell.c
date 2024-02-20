@@ -66,7 +66,7 @@ void static loop_shell2(struct1 *param, char *current_dir, size_t len)
     int shell_running = 1;
 
     while (shell_running && getline(&param->line, &len, stdin) != -1) {
-        param->line[strcspn(param->line, "\n")] = 0;
+        param->line[my_strcspn(param->line, "\n")] = 0;
         param->tokens = separe_diff_line(param->line);
         getcwd(current_dir, sizeof(current_dir));
         verif_specifier(param, current_dir);
