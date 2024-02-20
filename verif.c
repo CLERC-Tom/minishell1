@@ -46,10 +46,6 @@ void verif_exist(struct1 *param)
 
 void dif_commande(struct1 *param)
 {
-    if (verif_builtin(param) == 0) {
-        if (my_build_command(param->tokens[0]) == 0) {
-        }
-    }
     if (my_strcmp(param->tokens[0], "exit") == 0) {
         exit_shell(param);
     }
@@ -72,8 +68,8 @@ int verif_specifier(struct1 *param, char current_dir[BUF_SIZE])
         }
         return 0;
     }
-    dif_commande(param);
     verif_exist(param);
+    dif_commande(param);
     if (isatty(STDIN_FILENO)) {
         my_printf("cobra>%s ", current_dir);
     }

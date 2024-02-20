@@ -12,6 +12,9 @@ char *my_getenv(const char *name)
     int len = str_len(name);
     extern char **environ;
 
+    if (name == NULL) {
+        return NULL;
+    }
     while (environ[i]) {
         if (my_strncmp(environ[i], name, len) == 0 && environ[i][len] == '=') {
             return &environ[i][len + 1];
@@ -26,8 +29,14 @@ char *execute_in(char *command)
     char *full_path = NULL;
     char *result = NULL;
 
+    if (command == NULL) {
+        return NULL;
+    }
     if (command[0] == '.' && command[1] == '/') {
         full_path = malloc(str_len(command) + 1);
+        if (full_path == NULL) {
+            return NULL;
+        }
         my_strcpy(full_path, &command[2]);
         if (access(full_path, X_OK) == 0) {
             result = my_strdup(full_path);
@@ -39,22 +48,46 @@ char *execute_in(char *command)
     return NULL;
 }
 
+static char *create_full_path(char *command, char *path_part)
+{
+    char *full_path = malloc(str_len(path_part) + str_len(command) + 2);
+
+    if (full_path == NULL) {
+        return NULL;
+    }
+    my_strcpy(full_path, path_part);
+    my_strcat(full_path, "/");
+    my_strcat(full_path, command);
+    return full_path;
+}
+
+static char *check_command_access(char *command, char *path_part)
+{
+    char *result;
+    char *full_path = create_full_path(command, path_part);
+
+    if (full_path == NULL){
+        return NULL;
+    }
+    if (access(full_path, X_OK) == 0) {
+        result = my_strdup(full_path);
+        free(full_path);
+        return result;
+    }
+    free(full_path);
+    return NULL;
+}
+
 char *parcours_path(char *command, char *path_part)
 {
-    char *full_path = NULL;
-    char *result = NULL;
+    char *result;
 
-    while (path_part != NULL){
-        full_path = malloc(str_len(path_part) + str_len(command) + 2);
-        my_strcpy(full_path, path_part);
-        my_strcat(full_path, "/");
-        my_strcat(full_path, command);
-        if (access(full_path, X_OK) == 0) {
-            result = my_strdup(full_path);
-            free(full_path);
-            break;
-        }
-        free(full_path);
+    if (command == NULL || path_part == NULL){
+        return NULL;
+    }
+    result = NULL;
+    while (path_part != NULL && result == NULL){
+        result = check_command_access(command, path_part);
         path_part = strtok(NULL, ":");
     }
     return result;
@@ -66,8 +99,14 @@ char *find_command(char *command)
     char *result = execute_in(command);
     char *path_part;
 
+    if (command == NULL) {
+        return NULL;
+    }
     if (result == NULL) {
         path = my_getenv("PATH");
+        if (path == NULL) {
+            return NULL;
+        }
         path_part = strtok(my_strdup(path), ":");
         result = parcours_path(command, path_part);
         free(my_strdup(path));
@@ -77,6 +116,9 @@ char *find_command(char *command)
 
 static void erreur1(char *full_path, char *argv[], char **environ)
 {
+    if (full_path == NULL || argv == NULL || environ == NULL) {
+        exit(EXIT_FAILURE);
+    }
     execve(full_path, argv, environ);
     perror("execve");
     exit(EXIT_FAILURE);
@@ -84,6 +126,9 @@ static void erreur1(char *full_path, char *argv[], char **environ)
 
 static int verif_error(pid_t pid)
 {
+    if (pid < 0) {
+        return 84;
+    }
     if (waitpid(pid, NULL, 0) < 0) {
         perror("waitpid");
         return 84;
@@ -95,14 +140,15 @@ int make_all(char *file, char *argv[])
 {
     extern char **environ;
     char *full_path = find_command(file);
-    pid_t pid = fork();
+    pid_t pid;
 
+    if (file == NULL || argv == NULL) {
+        return 84;
+    }
     if (full_path == NULL) {
         return 84;
     }
-    if (pid < 0) {
-        return 84;
-    }
+    pid = fork();
     if (pid == 0) {
         erreur1(full_path, argv, environ);
     } else {
