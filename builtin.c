@@ -143,17 +143,17 @@ int make_all(char *file, char *argv[])
     pid_t pid;
 
     if (file == NULL || argv == NULL) {
-        return 84;
+        return 1;
     }
     if (full_path == NULL) {
-        return 84;
+        return 1;
     }
     pid = fork();
     if (pid == 0) {
         erreur1(full_path, argv, environ);
     } else {
         if (verif_error(pid) != 0) {
-            return 84;
+            return 1;
         }
     }
     free(full_path);

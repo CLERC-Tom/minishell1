@@ -17,7 +17,7 @@ int main(void)
     struct1 *param = malloc(sizeof(struct1));
 
     if (param == NULL) {
-        return 84;
+        return 1;
     }
     init_shell(param);
     free_all(param);
