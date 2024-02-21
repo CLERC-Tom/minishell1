@@ -39,7 +39,7 @@ void verif_exist(struct1 *param)
 {
     if (verif_builtin(param) == 0) {
         if (my_build_command(param->tokens[0]) == 0) {
-            printf("%s: Command not found.\n", param->tokens[0]);
+            my_printf("%s: Command not found.\n", param->tokens[0]);
         }
     }
 }
