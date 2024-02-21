@@ -6,10 +6,24 @@
 */
 #include "my.h"
 
+int my_isalpha(int c)
+{
+    return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
+}
+
 int check_arguments(struct1 *param)
 {
+    for (int i = 0; param->tokens[1][i] != '\0'; i++) {
+            if (!my_isalpha(param->tokens[1][i])) {
+                my_printf("setenv: Variable name must begin with a letter.\n");
+                return 1;
+            }
+    }
     if (param->tokens[1] == NULL) {
         my_env();
+        return 0;
+    }
+    if (param->tokens[2] == NULL) {
         return 0;
     } else if (param->tokens[2] == NULL || param->tokens[3] != NULL) {
         my_printf("setenv: Too many arguments.\n");

@@ -22,6 +22,14 @@ int appel(struct1 *param, char *new_value)
     return 0;
 }
 
+void verif_nbarg(struct1 *param, char **env, int i, int j)
+{
+    if (my_strncmp(env[i], param->tokens[j],
+    str_len(param->tokens[j])) == 0) {
+        env[i] = NULL;
+    }
+}
+
 int my_unsetenv(struct1 *params)
 {
     extern char **environ;
@@ -31,14 +39,12 @@ int my_unsetenv(struct1 *params)
         my_printf("unsetenv: Too few arguments.\n");
         return 1;
     }
-    for (int i = 0; env[i] != NULL; i++) {
-        if (my_strncmp(env[i], params->tokens[1],
-        str_len(params->tokens[1])) == 0) {
-            env[i] = NULL;
-            return 0;
+    for (int j = 1; params->tokens[j] != NULL; j++) {
+        for (int i = 0; env[i] != NULL; i++) {
+            verif_nbarg(params, env, i, j);
         }
     }
-    return 1;
+    return 0;
 }
 
 void my_env(void)
