@@ -58,6 +58,7 @@ int free_all(struct1 *param);
 char *my_getenv(const char *name);
 char *find_command(char *command);
 int make_all(char *file, char *argv[]);
+int appel(struct1 *param, char *new_value);
 
 int my_setenv(struct1 *param);
 void my_env(void);

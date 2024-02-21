@@ -22,36 +22,13 @@ int appel(struct1 *param, char *new_value)
     return 0;
 }
 
-int my_setenv(struct1 *param)
-{
-    extern char **environ;
-    char **env = environ;
-    char *new_value;
-    int n = 0;
-
-    if (param->tokens[1] == NULL ||
-    param->tokens[2] == NULL) {
-        return 1;
-    }
-    new_value = malloc(str_len(param->tokens[1])
-    + str_len(param->tokens[2]) + 2);
-    if (new_value == NULL) {
-        return 1;
-    }
-    appel(param, new_value);
-    for (int i = 0; env[i] != NULL; i ++) {
-        n = i;
-    }
-    env[n] = new_value;
-    return 0;
-}
-
 int my_unsetenv(struct1 *params)
 {
     extern char **environ;
     char **env = environ;
 
     if (params->tokens[1] == NULL) {
+        my_printf("unsetenv: Too few arguments.\n");
         return 1;
     }
     for (int i = 0; env[i] != NULL; i++) {

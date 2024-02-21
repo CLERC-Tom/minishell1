@@ -10,6 +10,7 @@ SRC	=   my_putchar.c			\
 		my_put_nbr.c			\
 		my_putstr.c			\
 		my_strlen.c			\
+		my_setenv.c \
 		strdup.c \
 		my_strncmp.c \
 		builtin.c \
