@@ -37,7 +37,7 @@ char *execute_in(char *command)
         if (full_path == NULL) {
             return NULL;
         }
-        my_strcpy(full_path, &command[2]);
+        my_strcpy(full_path, command);
         if (access(full_path, X_OK) == 0) {
             result = my_strdup(full_path);
             free(full_path);
@@ -143,20 +143,16 @@ static int verif_pid(pid_t pid, char *full_path, char *argv[], char **environ)
     int status = 0;
 
     if (pid == 0) {
-        if (execve(full_path, argv, environ) == -1) {
-            perror("execve");
-            exit(EXIT_FAILURE);
-        }
+        execve(full_path, argv, environ);
+        perror(full_path);
+        exit(EXIT_FAILURE);
     } else {
-        if (waitpid(pid, &status, 0) < 0) {
-            perror("waitpid");
-            return 1;
-        }
-        if (WIFSIGNALED(status)) {
+        waitpid(pid, &status, 0);
+        if (WIFEXITED(status)) {
             return WEXITSTATUS(status);
         }
     }
-    return 0;
+    return 1;
 }
 
 int make_all(char *file, char *argv[], struct1 *param)
@@ -164,7 +160,6 @@ int make_all(char *file, char *argv[], struct1 *param)
     extern char **environ;
     char *full_path = find_command(file);
     pid_t pid;
-    int status = 0;
 
     if (file == NULL || argv == NULL) {
         param->last_command_status = 1;
@@ -175,7 +170,6 @@ int make_all(char *file, char *argv[], struct1 *param)
         return 1;
     }
     pid = fork();
-    status = verif_pid(pid, full_path, argv, environ);
-    free(full_path);
-    return status;
+    param->last_command_status = verif_pid(pid, full_path, argv, environ);
+    return param->last_command_status;
 }

@@ -15,7 +15,8 @@ int check_arguments(struct1 *param)
 {
     for (int i = 0; param->tokens[1][i] != '\0'; i++) {
             if (!my_isalpha(param->tokens[1][i])) {
-                my_printf("setenv: Variable name must begin with a letter.\n");
+                write(2, "setenv: Variable name", 22);
+                write(2, " must begin with a letter.\n", 27);
                 return 1;
             }
     }
@@ -26,7 +27,7 @@ int check_arguments(struct1 *param)
     if (param->tokens[2] == NULL) {
         return 0;
     } else if (param->tokens[2] == NULL || param->tokens[3] != NULL) {
-        my_printf("setenv: Too many arguments.\n");
+        write(2, "setenv: Too many arguments.\n", 29);
         return 1;
     }
     return -1;

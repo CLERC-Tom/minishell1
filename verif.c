@@ -37,13 +37,18 @@ int verif_builtin(struct1 *param)
     return 1;
 }
 
-void verif_exist(struct1 *param)
+int verif_exist(struct1 *param)
 {
     if (verif_builtin(param) == 0) {
-        if (my_build_command(param->tokens[0]) == 0) {
-            my_printf("%s: Command not found.\n", param->tokens[0]);
-        }
+        return 0;
     }
+    if (my_build_command(param->tokens[0]) == 0) {
+        write(2, param->tokens[0], strlen(param->tokens[0]));
+        write(2, ": Command not found.\n", 20);
+        param->last_command_status = 1;
+        return 1;
+    }
+    return 0;
 }
 
 void dif_commande(struct1 *param)
@@ -70,8 +75,9 @@ int verif_specifier(struct1 *param, char current_dir[BUF_SIZE])
         }
         return 0;
     }
-    verif_exist(param);
-    dif_commande(param);
+    if (verif_exist(param) == 0) {
+        dif_commande(param);
+    }
     if (isatty(STDIN_FILENO)) {
         my_printf("cobra>%s ", current_dir);
     }

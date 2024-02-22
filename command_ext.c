@@ -36,8 +36,8 @@ int my_unsetenv(struct1 *params)
     char **env = environ;
 
     if (params->tokens[1] == NULL) {
-        my_printf("unsetenv: Too few arguments.\n");
-        return 1;
+        write(2, "unsetenv: Too few arguments.\n", 30);
+        exit(1);
     }
     for (int j = 1; params->tokens[j] != NULL; j++) {
         for (int i = 0; env[i] != NULL; i++) {

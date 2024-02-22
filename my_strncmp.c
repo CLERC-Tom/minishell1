@@ -29,16 +29,25 @@ int my_strncmp(const char *str1, const char *str2, int n)
     return 0;
 }
 
+int check_char(const char *s, const char *reject)
+{
+    const char *r;
+
+    for (r = reject; *r; r++) {
+        if (*s == *r) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 int my_strcspn(const char *str, const char *reject)
 {
     const char *s;
-    const char *r;
 
     for (s = str; *s; s++) {
-        for (r = reject; *r; r++) {
-            if (*s == *r) {
-                return s - str;
-            }
+        if (check_char(s, reject)) {
+            return s - str;
         }
     }
     return s - str;

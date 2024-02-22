@@ -115,5 +115,4 @@ void init_shell(struct1 *param)
     param->copenv = copy_env();
     signal(SIGINT, gestion_error);
     loop_shell(param);
-    exit_shell(param);
 }
