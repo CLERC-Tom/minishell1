@@ -98,6 +98,7 @@ char *find_command(char *command)
     char *path = NULL;
     char *result = execute_in(command);
     char *path_part;
+    char *temp_path;
 
     if (command == NULL) {
         return NULL;
@@ -107,9 +108,10 @@ char *find_command(char *command)
         if (path == NULL) {
             return NULL;
         }
-        path_part = strtok(my_strdup(path), ":");
+        temp_path = my_strdup(path);
+        path_part = strtok(temp_path, ":");
         result = parcours_path(command, path_part);
-        free(my_strdup(path));
+        free(temp_path);
     }
     return result;
 }
@@ -117,11 +119,11 @@ char *find_command(char *command)
 static void erreur1(char *full_path, char *argv[], char **environ)
 {
     if (full_path == NULL || argv == NULL || environ == NULL) {
-        exit(EXIT_FAILURE);
+        exit(1);
     }
     execve(full_path, argv, environ);
     perror("execve");
-    exit(EXIT_FAILURE);
+    exit(1);
 }
 
 static int verif_error(pid_t pid)
@@ -136,26 +138,44 @@ static int verif_error(pid_t pid)
     return 0;
 }
 
-int make_all(char *file, char *argv[])
+static int verif_pid(pid_t pid, char *full_path, char *argv[], char **environ)
+{
+    int status = 0;
+
+    if (pid == 0) {
+        if (execve(full_path, argv, environ) == -1) {
+            perror("execve");
+            exit(EXIT_FAILURE);
+        }
+    } else {
+        if (waitpid(pid, &status, 0) < 0) {
+            perror("waitpid");
+            return 1;
+        }
+        if (WIFSIGNALED(status)) {
+            return WEXITSTATUS(status);
+        }
+    }
+    return 0;
+}
+
+int make_all(char *file, char *argv[], struct1 *param)
 {
     extern char **environ;
     char *full_path = find_command(file);
     pid_t pid;
+    int status = 0;
 
     if (file == NULL || argv == NULL) {
+        param->last_command_status = 1;
         return 1;
     }
     if (full_path == NULL) {
+        param->last_command_status = 1;
         return 1;
     }
     pid = fork();
-    if (pid == 0) {
-        erreur1(full_path, argv, environ);
-    } else {
-        if (verif_error(pid) != 0) {
-            return 1;
-        }
-    }
+    status = verif_pid(pid, full_path, argv, environ);
     free(full_path);
-    return 0;
+    return status;
 }

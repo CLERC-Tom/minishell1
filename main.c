@@ -15,12 +15,14 @@
 int main(void)
 {
     struct1 *param = malloc(sizeof(struct1));
+    int status;
 
     if (param == NULL) {
         return 1;
     }
     init_shell(param);
+    status = param->last_command_status;
     free_all(param);
     free(param);
-    return 0;
+    return status;
 }

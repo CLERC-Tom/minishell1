@@ -17,7 +17,7 @@
 int exit_shell(struct1 *param)
 {
     free_all(param);
-    exit(1);
+    exit(0);
 }
 
 void gestion_error(int i)

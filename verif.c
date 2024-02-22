@@ -26,13 +26,15 @@ int verif_builtin(struct1 *param)
         my_strcmp(param->tokens[0], "env") == 0 ||
         my_strcmp(param->tokens[0], "setenv") == 0 ||
         my_strcmp(param->tokens[0], "unsetenv") == 0) {
-        return 1;
+        param->last_command_status = 0;
+        return 0;
     }
     if (my_build_command(param->tokens[0])) {
-        make_all(param->tokens[0], param->tokens);
-        return 1;
+        param->last_command_status =
+        make_all(param->tokens[0], param->tokens, param);
+        return 0;
     }
-    return 0;
+    return 1;
 }
 
 void verif_exist(struct1 *param)

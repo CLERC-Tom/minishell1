@@ -27,6 +27,7 @@ typedef struct {
     char **tokens;
     char **env;
     char **tokens2;
+    int last_command_status;
     char *line;
 }struct1;
 
@@ -59,7 +60,7 @@ int free_all(struct1 *param);
 
 char *my_getenv(const char *name);
 char *find_command(char *command);
-int make_all(char *file, char *argv[]);
+int make_all(char *file, char *argv[], struct1 *param);
 int appel(struct1 *param, char *new_value);
 
 int my_setenv(struct1 *param);
