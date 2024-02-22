@@ -147,13 +147,21 @@ static int verif_pid(pid_t pid, char *full_path, char *argv[], char **environ)
         perror(full_path);
         exit(EXIT_FAILURE);
     } else {
-        waitpid(pid, &status, 0);
+        if (waitpid(pid, &status, 0) == -1) {
+            perror("waitpid");
+            return -1;
+        }
         if (WIFEXITED(status)) {
             return WEXITSTATUS(status);
+        } else if (WIFSIGNALED(status)) {
+            return WTERMSIG(status);
+        } else {
+            // Cas inattendu
+            return -1;
         }
     }
-    return 1;
 }
+
 
 int make_all(char *file, char *argv[], struct1 *param)
 {

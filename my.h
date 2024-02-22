@@ -56,6 +56,7 @@ void init_shell(struct1 *param);
 int verif_specifier(struct1 *param, char current_dir[BUF_SIZE]);
 int exit_shell(struct1 *param);
 void gestion_error(int i);
+int full_exit(struct1 *param);
 int free_all(struct1 *param);
 
 char *my_getenv(const char *name);

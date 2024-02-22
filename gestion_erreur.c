@@ -20,6 +20,12 @@ int exit_shell(struct1 *param)
     exit(0);
 }
 
+int full_exit(struct1 *param)
+{
+    free_all(param);
+    exit(1);
+}
+
 void gestion_error(int i)
 {
     write(STDOUT_FILENO, "\ncobra> ", 10);

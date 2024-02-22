@@ -54,7 +54,7 @@ int verif_exist(struct1 *param)
 void dif_commande(struct1 *param)
 {
     if (my_strcmp(param->tokens[0], "exit") == 0) {
-        exit_shell(param);
+        full_exit(param);
     }
     if (my_strcmp(param->tokens[0], "env") == 0) {
         my_env();
