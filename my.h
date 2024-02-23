@@ -29,7 +29,10 @@ typedef struct {
     char **tokens2;
     int last_command_status;
     char *line;
-}struct1;
+    char **execute;
+    char *input;
+    char *current_dir;
+} struct1;
 
 void my_putchar(char c);
 int my_strncmp(const char *str1, const char *str2, int n);
@@ -46,13 +49,13 @@ int str_len(const char *str);
 int my_printf(const char *format, ...);
 char *my_strdup(char const *src);
 static int count_verif(const char *p, const char *r);
-void my_strcat(char *chaine1, char *chaine2);
+char *my_strcat(char *dest, char *src);
 
 void gestion_error(int i);
 char **separe_diff_line(char *line);
-void loop_shell(struct1 *param);
+void loop_shell(struct1 *param, char **argv, char **env);
 char **copy_env(void);
-void init_shell(struct1 *param);
+void init_shell(struct1 *param, char **argv, char **env);
 int verif_specifier(struct1 *param, char current_dir[BUF_SIZE]);
 int exit_shell(struct1 *param);
 void gestion_error(int i);
@@ -62,10 +65,13 @@ int free_all(struct1 *param);
 char *my_getenv(const char *name);
 char *find_command(char *command);
 int make_all(char *file, char *argv[], struct1 *param);
+int execute2(char **argv, char **env, struct1 *s);
 int appel(struct1 *param, char *new_value);
 
 int my_setenv(struct1 *param);
 void my_env(void);
+int free_all(struct1 *param);
+void segfault_sigaction(int signal, siginfo_t *si, void *arg);
 int my_unsetenv(struct1 *param);
 
 #endif /* MY_H */

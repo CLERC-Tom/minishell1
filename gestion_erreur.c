@@ -14,6 +14,17 @@
 #include <signal.h>
 #include "my.h"
 
+int free_all(struct1 *param)
+{
+    if (param->copenv != NULL) {
+        for (int i = 0; param->copenv[i] != NULL; i++) {
+            free(param->copenv[i]);
+        }
+        free(param->copenv);
+    }
+    return 0;
+}
+
 int exit_shell(struct1 *param)
 {
     free_all(param);

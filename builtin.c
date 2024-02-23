@@ -6,6 +6,12 @@
 */
 #include "my.h"
 
+void segfault_sigaction(int signal, siginfo_t *si, void *arg)
+{
+    printf("Segfault\n");
+    exit(0);
+}
+
 char *my_getenv(const char *name)
 {
     int i = 0;
@@ -138,14 +144,15 @@ static int verif_error(pid_t pid)
     return 0;
 }
 
-static int verif_pid(pid_t pid, char *full_path, char *argv[], char **environ)
+static int verif_pid(char *full_path, char *argv[], char **environ)
 {
-    int status = 0;
+    pid_t pid = fork();
+    int status;
 
     if (pid == 0) {
         execve(full_path, argv, environ);
         perror(full_path);
-        exit(EXIT_FAILURE);
+        exit(2);
     } else {
         if (waitpid(pid, &status, 0) == -1) {
             perror("waitpid");
@@ -153,15 +160,16 @@ static int verif_pid(pid_t pid, char *full_path, char *argv[], char **environ)
         }
         if (WIFEXITED(status)) {
             return WEXITSTATUS(status);
-        } else if (WIFSIGNALED(status)) {
-            return WTERMSIG(status);
-        } else {
-            // Cas inattendu
-            return -1;
         }
+        if (WIFSIGNALED(status)) {
+            if (WTERMSIG(status) == SIGSEGV) {
+                printf("Segfault\n");
+            }
+            return WTERMSIG(status);
+        }
+        return 1;
     }
 }
-
 
 int make_all(char *file, char *argv[], struct1 *param)
 {
@@ -171,13 +179,35 @@ int make_all(char *file, char *argv[], struct1 *param)
 
     if (file == NULL || argv == NULL) {
         param->last_command_status = 1;
-        return 1;
+       return 1; 
     }
     if (full_path == NULL) {
         param->last_command_status = 1;
-        return 1;
+       return 1; 
     }
     pid = fork();
-    param->last_command_status = verif_pid(pid, full_path, argv, environ);
-    return param->last_command_status;
+    if (pid == 0) {
+        if (execve(full_path, argv, environ) == -1) {
+            perror(full_path);
+            exit(2);
+        }
+    } else {
+        int status;
+        if (waitpid(pid, &status, 0) == -1) {
+            perror("waitpid");
+           return 1; 
+        }
+        if (WIFEXITED(status)) {
+            param->last_command_status = WEXITSTATUS(status);
+            return param->last_command_status;
+        }
+        if (WIFSIGNALED(status)) {
+            if (WTERMSIG(status) == SIGSEGV) {
+                my_printf("Segfault\n");
+            }
+            return 0;
+        }
+        return 1;
+    }
+    return 1;
 }

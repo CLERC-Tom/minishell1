@@ -14,15 +14,18 @@
 #include <signal.h>
 #include "my.h"
 
-void my_strcat(char *chaine1, char *chaine2)
+char *my_strcat(char *dest, char *src)
 {
-    while (*chaine1) {
-        chaine1++;
+    int i = 0;
+    int j = 0;
+
+    while (dest[i] != '\0') {
+        i++;
     }
-    while (*chaine2) {
-        *chaine1 = *chaine2;
-        chaine1++;
-        chaine2++;
+    while (src[j] != '\0') {
+        dest[i + j] = src[j];
+        j++;
     }
-    *chaine1 = '\0';
+    dest[i + j] = '\0';
+    return dest;
 }

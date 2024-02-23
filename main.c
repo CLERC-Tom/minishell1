@@ -12,7 +12,7 @@
 #include <signal.h>
 #include "my.h"
 
-int main(void)
+int main(int argc, char **argv, char **env)
 {
     struct1 *param = malloc(sizeof(struct1));
     int status;
@@ -20,7 +20,7 @@ int main(void)
     if (param == NULL) {
         return 1;
     }
-    init_shell(param);
+    init_shell(param, argv, env);
     status = param->last_command_status;
     free_all(param);
     free(param);
