@@ -40,7 +40,7 @@ int my_strcspn(const char *str, const char *reject);
 char **str_to_wordarray(char *phrase, struct1 *param);
 int count_lines2(char *str);
 int count_char(char *str);
-int my_strcmp(char *s1, char *s2);
+int my_strcmp(const char *s1, const char *s2);
 int my_put_nbr(int n);
 int my_isalpha(int c);
 char *my_strcpy(char *dest, char const *src);
@@ -64,6 +64,7 @@ int free_all(struct1 *param);
 
 char *my_getenv(const char *name);
 char *find_command(char *command);
+
 int make_all(char *file, char *argv[], struct1 *param);
 int execute2(char **argv, char **env, struct1 *s);
 int appel(struct1 *param, char *new_value);

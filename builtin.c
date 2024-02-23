@@ -128,6 +128,7 @@ static void erreur1(char *full_path, char *argv[], char **environ)
         exit(1);
     }
     execve(full_path, argv, environ);
+    printf("1");
     perror("execve");
     exit(1);
 }
@@ -138,37 +139,11 @@ static int verif_error(pid_t pid)
         return 1;
     }
     if (waitpid(pid, NULL, 0) < 0) {
+        printf("2");
         perror("waitpid");
         return 1;
     }
     return 0;
-}
-
-static int verif_pid(char *full_path, char *argv[], char **environ)
-{
-    pid_t pid = fork();
-    int status;
-
-    if (pid == 0) {
-        execve(full_path, argv, environ);
-        perror(full_path);
-        exit(2);
-    } else {
-        if (waitpid(pid, &status, 0) == -1) {
-            perror("waitpid");
-            return -1;
-        }
-        if (WIFEXITED(status)) {
-            return WEXITSTATUS(status);
-        }
-        if (WIFSIGNALED(status)) {
-            if (WTERMSIG(status) == SIGSEGV) {
-                printf("Segfault\n");
-            }
-            return WTERMSIG(status);
-        }
-        return 1;
-    }
 }
 
 int make_all(char *file, char *argv[], struct1 *param)
@@ -176,6 +151,8 @@ int make_all(char *file, char *argv[], struct1 *param)
     extern char **environ;
     char *full_path = find_command(file);
     pid_t pid;
+    int tempo = 0;
+    int status;
 
     if (file == NULL || argv == NULL) {
         param->last_command_status = 1;
@@ -186,28 +163,30 @@ int make_all(char *file, char *argv[], struct1 *param)
        return 1; 
     }
     pid = fork();
+    if (my_build_command(param->tokens[0]) == 0) {
+        write(2, param->tokens[0], str_len(param->tokens[0]));
+        write(2, ": Command not found.\n", 20);
+        exit(1);
+    }
     if (pid == 0) {
-        if (execve(full_path, argv, environ) == -1) {
+        if ((tempo = execve(full_path, argv, environ)) == -1) {
             perror(full_path);
-            exit(2);
         }
     } else {
-        int status;
-        if (waitpid(pid, &status, 0) == -1) {
+        if (wait(&status) == -1) {
             perror("waitpid");
-           return 1; 
+            return 1; 
         }
         if (WIFEXITED(status)) {
-            param->last_command_status = WEXITSTATUS(status);
-            return param->last_command_status;
+            return WEXITSTATUS(status);
         }
         if (WIFSIGNALED(status)) {
             if (WTERMSIG(status) == SIGSEGV) {
-                my_printf("Segfault\n");
+                my_printf("Segmentation fault\n");
             }
             return 0;
         }
-        return 1;
+        return status;
     }
-    return 1;
+    return status;
 }

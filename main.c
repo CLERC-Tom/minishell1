@@ -15,7 +15,7 @@
 int main(int argc, char **argv, char **env)
 {
     struct1 *param = malloc(sizeof(struct1));
-    int status;
+    int status = 0;
 
     if (param == NULL) {
         return 1;
