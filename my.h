@@ -64,6 +64,7 @@ int free_all(struct1 *param);
 
 char *my_getenv(const char *name);
 char *find_command(char *command);
+int my_build_command(char *command);
 
 int make_all(char *file, char *argv[], struct1 *param);
 int execute2(char **argv, char **env, struct1 *s);

@@ -6,12 +6,6 @@
 */
 #include "my.h"
 
-void segfault_sigaction(int signal, siginfo_t *si, void *arg)
-{
-    printf("Segfault\n");
-    exit(0);
-}
-
 char *my_getenv(const char *name)
 {
     int i = 0;
@@ -153,6 +147,7 @@ int make_all(char *file, char *argv[], struct1 *param)
     pid_t pid;
     int tempo = 0;
     int status;
+    pid = fork();
 
     if (file == NULL || argv == NULL) {
         param->last_command_status = 1;
@@ -160,9 +155,8 @@ int make_all(char *file, char *argv[], struct1 *param)
     }
     if (full_path == NULL) {
         param->last_command_status = 1;
-       return 1; 
+       return 1;
     }
-    pid = fork();
     if (my_build_command(param->tokens[0]) == 0) {
         write(2, param->tokens[0], str_len(param->tokens[0]));
         write(2, ": Command not found.\n", 20);
