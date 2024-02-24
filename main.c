@@ -12,15 +12,15 @@
 #include <signal.h>
 #include "my.h"
 
-int main(int argc, char **argv, char **env)
+int main(void)
 {
     struct1 *param = malloc(sizeof(struct1));
-    int status = 0;
+    int status;
 
     if (param == NULL) {
         return 1;
     }
-    init_shell(param, argv, env);
+    init_shell(param);
     status = param->last_command_status;
     free_all(param);
     free(param);

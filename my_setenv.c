@@ -19,8 +19,8 @@ int check_arguments(struct1 *param)
     }
     for (int i = 0; param->tokens[1][i] != '\0'; i++) {
         if (!my_isalpha(param->tokens[1][i])) {
-            write(2, " must begin with a letter.\n", 27);
             write(2, "setenv: Variable name", 22);
+            write(2, " must begin with a letter.\n", 27);
             return 1;
         }
     }

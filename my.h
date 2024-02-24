@@ -53,9 +53,9 @@ char *my_strcat(char *dest, char *src);
 
 void gestion_error(int i);
 char **separe_diff_line(char *line);
-void loop_shell(struct1 *param, char **argv, char **env);
+void init_shell(struct1 *param);
 char **copy_env(void);
-void init_shell(struct1 *param, char **argv, char **env);
+void init_shell(struct1 *param);
 int verif_specifier(struct1 *param, char current_dir[BUF_SIZE]);
 int exit_shell(struct1 *param);
 void gestion_error(int i);

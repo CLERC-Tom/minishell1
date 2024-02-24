@@ -50,20 +50,20 @@ static void handle_tokens(struct1 *param, char *current_dir)
     param->tokens = NULL;
 }
 
-void loop_shell2(struct1 *param, size_t len, char **argv, char **env)
+void static loop_shell2(struct1 *param, char *current_dir, size_t len)
 {
     int shell_running = 1;
 
     while (shell_running && getline(&param->line, &len, stdin) != -1) {
         param->line[my_strcspn(param->line, "\n")] = 0;
         param->tokens = separe_diff_line(param->line);
-        getcwd(param->current_dir, sizeof(param->current_dir));
-        verif_specifier(param, param->current_dir);
-        handle_tokens(param, param->current_dir);
+        getcwd(current_dir, sizeof(current_dir));
+        verif_specifier(param, current_dir);
+        handle_tokens(param, current_dir);
     }
 }
 
-void loop_shell(struct1 *param, char **argv, char **env)
+void loop_shell(struct1 *param)
 {
     char current_dir[BUF_SIZE];
     size_t len = 0;
@@ -72,7 +72,7 @@ void loop_shell(struct1 *param, char **argv, char **env)
     if (isatty(STDIN_FILENO)) {
         my_printf("cobra>%s ", current_dir);
     }
-    loop_shell2(param, len, argv, env);
+    loop_shell2(param, current_dir, len);
     free(param->line);
 }
 
@@ -99,9 +99,9 @@ char **copy_env()
     return copenv;
 }
 
-void init_shell(struct1 *param, char **argv, char **env)
+void init_shell(struct1 *param)
 {
     param->copenv = copy_env();
     signal(SIGINT, gestion_error);
-    loop_shell(param, argv, env);
+    loop_shell(param);
 }
