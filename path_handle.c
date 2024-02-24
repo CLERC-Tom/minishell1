@@ -18,9 +18,15 @@ int check_file_and_path(char *file, char *full_path, struct1 *param)
 int execute_command(char *full_path, char *argv[], char **environ)
 {
     int tempo = 0;
+    char error_message[1024] = "";
 
     if ((tempo = execve(full_path, argv, environ)) == -1) {
-        perror(full_path);
+        my_strcat(error_message, full_path);
+        my_strcat(error_message, ": ");
+        my_strcat(error_message, strerror(errno));
+        my_strcat(error_message, ".\n");
+        write(2, error_message, str_len(error_message));
+        tempo = 1;
     }
     return tempo;
 }
