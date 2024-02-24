@@ -13,6 +13,7 @@ SRC	=   my_putchar.c			\
 		my_setenv.c \
 		strdup.c \
 		my_strncmp.c \
+		path_handle.c \
 		builtin.c \
 		my_strcmp.c 	\
 		my_printf.c			\

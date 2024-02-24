@@ -69,6 +69,11 @@ int my_build_command(char *command);
 int make_all(char *file, char *argv[], struct1 *param);
 int execute2(char **argv, char **env, struct1 *s);
 int appel(struct1 *param, char *new_value);
+int check_file_and_path(char *file, char *full_path, struct1 *param);
+int execute_command(char *full_path, char *argv[], char **environ);
+int handle_status(int status);
+int check_command(char *file, struct1 *param);
+int fork_and_execute(char *full_path, char *argv[], char **environ);
 
 int my_setenv(struct1 *param);
 void my_env(void);
