@@ -52,3 +52,13 @@ int my_strcspn(const char *str, const char *reject)
     }
     return s - str;
 }
+
+int laste(char **env)
+{
+    int n = 0;
+
+    for (int i = 0; env[i] != NULL; i++) {
+        n = i;
+    }
+    return n;
+}

@@ -22,43 +22,45 @@ int appel(struct1 *param, char *new_value)
     return 0;
 }
 
+int verif_lol(struct1 *params)
+{
+    if (params->tokens[1] == NULL) {
+        write(2, "unsetenv: Too few arguments.\n", 30);
+        return 1;
+    }
+    return 0;
+}
+
+int unset_env_var(char **tmp, char *token)
+{
+    int j = 0;
+    int k;
+
+    while (tmp[j] != NULL) {
+        if (my_strncmp(tmp[j], token, str_len(token)) == 0
+        && tmp[j][str_len(token)] == '=') {
+            k = j;
+            while (tmp[k] != NULL) {
+                tmp[k] = tmp[k + 1];
+                k++;
+            }
+            break;
+        }
+        j++;
+    }
+    return 0;
+}
+
 int my_unsetenv(struct1 *params)
 {
     extern char **environ;
     char **tmp = environ;
 
-    if (params->tokens[1] == NULL) {
-        write(2, "unsetenv: Too few arguments.\n", 30);
-        return 1;
-    }
+    verif_lol(params);
     for (int i = 1; params->tokens[i] != NULL; i++) {
-        int j = 0;
-        while (tmp[j] != NULL) {
-            if (my_strncmp(tmp[j], params->tokens[i], str_len(params->tokens[i]))
-            == 0 && tmp[j][str_len(params->tokens[i])] == '=') {
-                int k = j;
-                while (environ[k] != NULL) {
-                    environ[k] = environ[k + 1];
-                    k++;
-                }
-                break;
-            }
-            j++;
-        }
+        unset_env_var(tmp, params->tokens[i]);
     }
     return 0;
-}
-
-
-
-int laste(char **env)
-{
-    int n = 0;
-
-    for (int i = 0; env[i] != NULL; i++) {
-        n = i;
-    }
-    return n;
 }
 
 void my_env(void)
