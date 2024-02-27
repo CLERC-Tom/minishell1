@@ -26,6 +26,7 @@ int my_unsetenv(struct1 *params)
 {
     extern char **environ;
     char **tmp = environ;
+
     if (params->tokens[1] == NULL) {
         write(2, "unsetenv: Too few arguments.\n", 30);
         return 1;
@@ -33,7 +34,8 @@ int my_unsetenv(struct1 *params)
     for (int i = 1; params->tokens[i] != NULL; i++) {
         int j = 0;
         while (tmp[j] != NULL) {
-            if (strncmp(tmp[j], params->tokens[i], strlen(params->tokens[i])) == 0 && tmp[j][strlen(params->tokens[i])] == '=') {
+            if (my_strncmp(tmp[j], params->tokens[i], str_len(params->tokens[i]))
+            == 0 && tmp[j][str_len(params->tokens[i])] == '=') {
                 int k = j;
                 while (environ[k] != NULL) {
                     environ[k] = environ[k + 1];
