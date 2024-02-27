@@ -24,9 +24,7 @@ int check_arguments(struct1 *param)
             return 1;
         }
     }
-    if (param->tokens[2] == NULL) {
-        return 0;
-    } else if (param->tokens[3] != NULL) {
+    if (param->tokens[3] != NULL) {
         write(2, "setenv: Too many arguments.\n", 29);
         return 1;
     }
@@ -35,13 +33,19 @@ int check_arguments(struct1 *param)
 
 char *create_new_value(struct1 *param)
 {
-    char *new_value = malloc(str_len(param->tokens[1])
-    + str_len(param->tokens[2]) + 2);
+    char *new_value;
 
-    if (new_value == NULL) {
-        return NULL;
+    if (param->tokens[2] != NULL) {
+        new_value = malloc(str_len(param->tokens[1]) + str_len(param->tokens[2]) + 2);
+        strcpy(new_value, param->tokens[1]);
+        strcat(new_value, "=");
+        strcat(new_value, param->tokens[2]);
+    } else {
+        new_value = malloc(str_len(param->tokens[1]) + 2);
+        strcpy(new_value, param->tokens[1]);
+        strcat(new_value, "=");
     }
-    appel(param, new_value);
+
     return new_value;
 }
 
