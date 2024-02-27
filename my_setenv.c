@@ -45,22 +45,55 @@ char *create_new_value(struct1 *param)
     return new_value;
 }
 
-int laste(char **env)
-{
+int laste(char **env) {
     int n = 0;
-
-    for (int i = 0; env[i] != NULL; i ++) {
+    for (int i = 0; env[i] != NULL; i++) {
         n = i;
     }
     return n;
 }
 
+int find_env_var(char **env, char *var) {
+    int i = 0;
+    int var_len = str_len(var);
+
+    while (env[i] != NULL) {
+        if (strncmp(env[i], var, var_len) == 0 && env[i][var_len] == '=') {
+            return i;
+        }
+        i++;
+    }
+    return -1;
+}
+
+char **copy_environ()
+{
+    extern char **environ;
+    int i = 0;
+    while (environ[i] != NULL) {
+        i++;
+    }
+    char **copy = malloc((i + 1) * sizeof(char *));
+    if (copy == NULL) {
+        return NULL;
+    }
+    for (int j = 0; j < i; j++) {
+        copy[j] = strdup(environ[j]);
+        if (copy[j] == NULL) {
+            return NULL;
+        }
+    }
+    copy[i] = NULL;
+    return copy;
+}
+
 int my_setenv(struct1 *param)
 {
     extern char **environ;
-    char **env = environ;
+    char **env = copy_environ();
     char *new_value;
     int check_arg_result = check_arguments(param);
+    int index;
 
     if (check_arg_result != -1) {
         return check_arg_result;
@@ -69,6 +102,15 @@ int my_setenv(struct1 *param)
     if (new_value == NULL) {
         return 1;
     }
-    env[laste(env)] = new_value;
+    index = find_env_var(env, param->tokens[1]);
+    if (index != -1) {
+        free(env[index]);
+        env[index] = new_value;
+    } else {
+        env[laste(env)] = new_value;
+    }
+    environ = env;
     return 0;
 }
+
+
