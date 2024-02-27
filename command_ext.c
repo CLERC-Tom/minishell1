@@ -24,18 +24,30 @@ int appel(struct1 *param, char *new_value)
 
 int my_unsetenv(struct1 *params)
 {
+    extern char **environ;
+    char **tmp = environ;
     if (params->tokens[1] == NULL) {
         write(2, "unsetenv: Too few arguments.\n", 30);
         return 1;
     }
     for (int i = 1; params->tokens[i] != NULL; i++) {
-        if (unsetenv(params->tokens[i]) != 0) {
-            perror("unsetenv");
-            exit(EXIT_FAILURE);
+        int j = 0;
+        while (tmp[j] != NULL) {
+            if (strncmp(tmp[j], params->tokens[i], strlen(params->tokens[i])) == 0 && tmp[j][strlen(params->tokens[i])] == '=') {
+                int k = j;
+                while (environ[k] != NULL) {
+                    environ[k] = environ[k + 1];
+                    k++;
+                }
+                break;
+            }
+            j++;
         }
     }
     return 0;
 }
+
+
 
 int laste(char **env)
 {
