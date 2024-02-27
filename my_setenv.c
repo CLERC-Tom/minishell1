@@ -42,13 +42,13 @@ char *create_new_value(struct1 *param)
 
     if (param->tokens[2] != NULL) {
         new_value = malloc(str_len(param->tokens[1]) + str_len(param->tokens[2]) + 2);
-        strcpy(new_value, param->tokens[1]);
-        strcat(new_value, "=");
-        strcat(new_value, param->tokens[2]);
+        my_strcpy(new_value, param->tokens[1]);
+        my_strcat(new_value, "=");
+        my_strcat(new_value, param->tokens[2]);
     } else {
         new_value = malloc(str_len(param->tokens[1]) + 2);
-        strcpy(new_value, param->tokens[1]);
-        strcat(new_value, "=");
+        my_strcpy(new_value, param->tokens[1]);
+        my_strcat(new_value, "=");
     }
 
     return new_value;
