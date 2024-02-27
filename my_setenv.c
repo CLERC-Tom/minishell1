@@ -45,15 +45,8 @@ char *create_new_value(struct1 *param)
     return new_value;
 }
 
-int laste(char **env) {
-    int n = 0;
-    for (int i = 0; env[i] != NULL; i++) {
-        n = i;
-    }
-    return n;
-}
-
-int find_env_var(char **env, char *var) {
+int find_env_var(char **env, char *var)
+{
     int i = 0;
     int var_len = str_len(var);
 
@@ -64,27 +57,6 @@ int find_env_var(char **env, char *var) {
         i++;
     }
     return -1;
-}
-
-char **copy_environ()
-{
-    extern char **environ;
-    int i = 0;
-    while (environ[i] != NULL) {
-        i++;
-    }
-    char **copy = malloc((i + 1) * sizeof(char *));
-    if (copy == NULL) {
-        return NULL;
-    }
-    for (int j = 0; j < i; j++) {
-        copy[j] = strdup(environ[j]);
-        if (copy[j] == NULL) {
-            return NULL;
-        }
-    }
-    copy[i] = NULL;
-    return copy;
 }
 
 int my_setenv(struct1 *param)
@@ -112,5 +84,3 @@ int my_setenv(struct1 *param)
     environ = env;
     return 0;
 }
-
-

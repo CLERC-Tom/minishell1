@@ -22,10 +22,11 @@ int appel(struct1 *param, char *new_value)
     return 0;
 }
 
-int my_unsetenv(struct1 *params) {
+int my_unsetenv(struct1 *params)
+{
     if (params->tokens[1] == NULL) {
         write(2, "unsetenv: Too few arguments.\n", 30);
-        exit(1);
+        return 1;
     }
     for (int i = 1; params->tokens[i] != NULL; i++) {
         if (unsetenv(params->tokens[i]) != 0) {
@@ -36,6 +37,15 @@ int my_unsetenv(struct1 *params) {
     return 0;
 }
 
+int laste(char **env)
+{
+    int n = 0;
+
+    for (int i = 0; env[i] != NULL; i++) {
+        n = i;
+    }
+    return n;
+}
 
 void my_env(void)
 {

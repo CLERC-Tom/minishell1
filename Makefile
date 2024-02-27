@@ -16,6 +16,7 @@ SRC	=   my_putchar.c			\
 		path_handle.c \
 		builtin.c \
 		my_strcmp.c 	\
+		cop_env.c \
 		my_printf.c			\
 		my_strcpy.c \
 		strtoword.c \
