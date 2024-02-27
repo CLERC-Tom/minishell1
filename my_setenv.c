@@ -18,6 +18,11 @@ int check_arguments(struct1 *param)
         return 0;
     }
     for (int i = 0; param->tokens[1][i] != '\0'; i++) {
+        if (param->tokens[1][i] == '=') {
+            write(2, "setenv: Variable name", 22);
+            write(2, " must contain alphanumeric character.\n", 39);
+            return 1;
+        }
         if (!my_isalpha(param->tokens[1][i])) {
             write(2, "setenv: Variable name", 22);
             write(2, " must begin with a letter.\n", 27);
