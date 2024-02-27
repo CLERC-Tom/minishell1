@@ -20,7 +20,8 @@ int execute_command(char *full_path, char *argv[], char **environ)
     int tempo = 0;
     char error_message[1024] = "";
 
-    if ((tempo = execve(full_path, argv, environ)) == -1) {
+    tempo = execve(full_path, argv, environ);
+    if (tempo == -1) {
         my_strcat(error_message, full_path);
         my_strcat(error_message, ": ");
         my_strcat(error_message, strerror(errno));

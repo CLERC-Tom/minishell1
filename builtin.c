@@ -46,7 +46,6 @@ char *execute_in(char *command)
     return NULL;
 }
 
-
 static char *create_full_path(char *command, char *path_part)
 {
     char *full_path = malloc(str_len(path_part) + str_len(command) + 2);
@@ -145,7 +144,6 @@ int make_all(char *file, char *argv[], struct1 *param)
     if (full_path == NULL) {
         full_path = my_strdup(file);
     }
-
     if (check_file_and_path(file, full_path, param)) {
         return 1;
     }

@@ -14,6 +14,7 @@ SRC	=   my_putchar.c			\
 		strdup.c \
 		my_strncmp.c \
 		path_handle.c \
+		check_setenv.c \
 		builtin.c \
 		my_strcmp.c 	\
 		cop_env.c \

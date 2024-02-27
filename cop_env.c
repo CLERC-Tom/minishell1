@@ -10,11 +10,12 @@ char **copy_environ()
 {
     extern char **environ;
     int i = 0;
+    char **copy;
 
     while (environ[i] != NULL) {
         i++;
     }
-    char **copy = malloc((i + 1) * sizeof(char *));
+    copy = malloc((i + 1) * sizeof(char *));
     if (copy == NULL) {
         return NULL;
     }

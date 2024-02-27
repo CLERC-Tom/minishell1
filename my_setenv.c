@@ -11,37 +11,13 @@ int my_isalpha(int c)
     return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
 }
 
-int check_arguments(struct1 *param)
-{
-    if (param->tokens[1] == NULL) {
-        my_env();
-        return 0;
-    }
-    for (int i = 0; param->tokens[1][i] != '\0'; i++) {
-        if (param->tokens[1][i] == '=') {
-            write(2, "setenv: Variable name", 22);
-            write(2, " must contain alphanumeric character.\n", 39);
-            return 1;
-        }
-        if (!my_isalpha(param->tokens[1][i])) {
-            write(2, "setenv: Variable name", 22);
-            write(2, " must begin with a letter.\n", 27);
-            return 1;
-        }
-    }
-    if (param->tokens[3] != NULL) {
-        write(2, "setenv: Too many arguments.\n", 29);
-        return 1;
-    }
-    return -1;
-}
-
 char *create_new_value(struct1 *param)
 {
     char *new_value;
 
     if (param->tokens[2] != NULL) {
-        new_value = malloc(str_len(param->tokens[1]) + str_len(param->tokens[2]) + 2);
+        new_value = malloc(str_len(param->tokens[1])
+        + str_len(param->tokens[2]) + 2);
         my_strcpy(new_value, param->tokens[1]);
         my_strcat(new_value, "=");
         my_strcat(new_value, param->tokens[2]);
@@ -50,7 +26,6 @@ char *create_new_value(struct1 *param)
         my_strcpy(new_value, param->tokens[1]);
         my_strcat(new_value, "=");
     }
-
     return new_value;
 }
 
@@ -68,22 +43,11 @@ int find_env_var(char **env, char *var)
     return -1;
 }
 
-int my_setenv(struct1 *param)
+static int my_setenv_part2(char **env, char *new_value, struct1 *param)
 {
     extern char **environ;
-    char **env = copy_environ();
-    char *new_value;
-    int check_arg_result = check_arguments(param);
-    int index;
+    int index = find_env_var(env, param->tokens[1]);
 
-    if (check_arg_result != -1) {
-        return check_arg_result;
-    }
-    new_value = create_new_value(param);
-    if (new_value == NULL) {
-        return 1;
-    }
-    index = find_env_var(env, param->tokens[1]);
     if (index != -1) {
         free(env[index]);
         env[index] = new_value;
@@ -92,4 +56,21 @@ int my_setenv(struct1 *param)
     }
     environ = env;
     return 0;
+}
+
+int my_setenv(struct1 *param)
+{
+    extern char **environ;
+    char **env = copy_environ();
+    char *new_value;
+    int check_arg_result = check_arguments(param);
+
+    if (check_arg_result != -1) {
+        return check_arg_result;
+    }
+    new_value = create_new_value(param);
+    if (new_value == NULL) {
+        return 1;
+    }
+    return my_setenv_part2(env, new_value, param);
 }

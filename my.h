@@ -75,6 +75,7 @@ int handle_status(int status);
 int check_command(char *file, struct1 *param);
 int fork_and_execute(char *full_path, char *argv[], char **environ);
 int laste(char **env);
+int check_arguments(struct1 *param);
 char **copy_environ(void);
 
 int my_setenv(struct1 *param);
