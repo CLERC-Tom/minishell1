@@ -32,21 +32,20 @@ char *execute_in(char *command)
     if (command == NULL) {
         return NULL;
     }
-    if (command[0] == '.' && command[1] == '/') {
-        full_path = malloc(str_len(command) + 1);
-        if (full_path == NULL) {
-            return NULL;
-        }
-        my_strcpy(full_path, command);
-        if (access(full_path, X_OK) == 0) {
-            result = my_strdup(full_path);
-            free(full_path);
-            return result;
-        }
-        free(full_path);
+    full_path = malloc(str_len(command) + 1);
+    if (full_path == NULL) {
+        return NULL;
     }
+    my_strcpy(full_path, command);
+    if (access(full_path, X_OK) == 0) {
+        result = my_strdup(full_path);
+        free(full_path);
+        return result;
+    }
+    free(full_path);
     return NULL;
 }
+
 
 static char *create_full_path(char *command, char *path_part)
 {
@@ -142,6 +141,10 @@ int make_all(char *file, char *argv[], struct1 *param)
 {
     extern char **environ;
     char *full_path = find_command(file);
+
+    if (full_path == NULL) {
+        full_path = my_strdup(file);
+    }
 
     if (check_file_and_path(file, full_path, param)) {
         return 1;
