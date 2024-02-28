@@ -25,7 +25,7 @@ int appel(struct1 *param, char *new_value)
 int verif_lol(struct1 *params)
 {
     if (params->tokens[1] == NULL) {
-        write(2, "unsetenv: Too few arguments.\n", 30);
+        write(1, "unsetenv: Too few arguments.\n", 30);
         return 1;
     }
     return 0;

@@ -35,7 +35,7 @@ int find_env_var(char **env, char *var)
     int var_len = str_len(var);
 
     while (env[i] != NULL) {
-        if (strncmp(env[i], var, var_len) == 0 && env[i][var_len] == '=') {
+        if (my_strncmp(env[i], var, var_len) == 0 && env[i][var_len] == '=') {
             return i;
         }
         i++;

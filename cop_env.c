@@ -20,7 +20,7 @@ char **copy_environ()
         return NULL;
     }
     for (int j = 0; j < i; j++) {
-        copy[j] = strdup(environ[j]);
+        copy[j] = my_strdup(environ[j]);
         if (copy[j] == NULL) {
             return NULL;
         }

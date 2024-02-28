@@ -43,9 +43,8 @@ int verif_exist(struct1 *param)
         return 0;
     }
     if (my_build_command(param->tokens[0]) == 0) {
-        write(2, param->tokens[0], str_len(param->tokens[0]));
-        write(2, ": Command not found.", 21);
-        write(2, "\n", 1);
+        write(1, param->tokens[0], str_len(param->tokens[0]));
+        write(1, ": Command not found.\n", 21);
         return 1;
     }
     return 0;

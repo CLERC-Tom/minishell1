@@ -39,5 +39,5 @@ int full_exit(struct1 *param)
 
 void gestion_error(int i)
 {
-    write(STDOUT_FILENO, "\ncobra> ", 10);
+    write(1, "\ncobra> ", 10);
 }

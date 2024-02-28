@@ -26,7 +26,7 @@ int execute_command(char *full_path, char *argv[], char **environ)
         my_strcat(error_message, ": ");
         my_strcat(error_message, strerror(errno));
         my_strcat(error_message, ".\n");
-        write(2, error_message, str_len(error_message));
+        write(1, error_message, str_len(error_message));
         tempo = 1;
     }
     return tempo;
@@ -49,9 +49,8 @@ int handle_status(int status)
 int check_command(char *file, struct1 *param)
 {
     if (my_build_command(param->tokens[0]) == 0) {
-        write(2, param->tokens[0], str_len(param->tokens[0]));
-        write(2, ": Command not found.", 21);
-        write(2, "\n", 1);
+        write(1, param->tokens[0], str_len(param->tokens[0]));
+        write(1, ": Command not found.\n", 21);
         return 1;
     }
     return 0;
